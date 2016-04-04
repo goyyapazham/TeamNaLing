@@ -1,14 +1,22 @@
+/* 
+   Team NaLing- Nalanda Sharadjaya and Ling Cheng
+   APCS2 pd5
+   HW24 -- Schemin
+   2016-04-04
+*/
+
 /*****************************************************
  * class Scheme
  * Simulates a rudimentary Scheme interpreter
  *
  * ALGORITHM for EVALUATING A SCHEME EXPRESSION:
-      1. Steal underpants.
-      2. ...
-      5. Profit!
+      1. Calculate the innermost expression and return the value
+      2. Use recursion on everything before the innermost expression, result of the innermost expression, and everything after.
+      3. Repeat steps 2 and 3 until the expression is done.
  *
- * STACK OF CHOICE: ____ by ____
- * b/c ...
+ * STACK OF CHOICE: ALStack by Nalanda Sharadjaya
+ * b/c since we'll be working with layers, we thought that using stacks is more efficient than using linked lists. 
+   We used ArrayList instead of just List because ArrayList provides a lot of methods that we would need to rewrite if we chose List.
  ******************************************************/
 
 import java.util.ArrayList;
@@ -33,17 +41,17 @@ public class Scheme {
 	   expression is, the earlier it gets evaluated. The following lines
 	   split the expression into things BEFORE and AFTER the innermost
 	   "nugget", which will be meaningful later. */
-	String before = expr.substring(0, expr.lastIndexOf("("));
+	String before = expr.substring(0, expr.lastIndexOf("(")); //everything before the innermost expression
 	String innermost =
 	    expr.substring(expr.lastIndexOf("("),
 			   expr.substring(expr.lastIndexOf("(")).indexOf(")")
-			   + expr.lastIndexOf("(") + 1);
+			   + expr.lastIndexOf("(") + 1);//the innermost expression
 	String after =
 	    expr.substring(expr.substring(expr.lastIndexOf("(")).indexOf(")")
-			   + expr.lastIndexOf("(") + 1);
+			   + expr.lastIndexOf("(") + 1);//everything after the innermost expression
 
 	//for convenience sake (easier to do indices w/ arrays than strings)
-	String[] tmp = innermost.split(" ");
+	String[] tmp = innermost.split(" "); //creates an array of the operation and numbers within the innermost expression
 
 	//store operation for unload call
 	int op = 0;
@@ -110,6 +118,26 @@ public class Scheme {
 	System.out.println(zoo4);
 	System.out.println("zoo4 eval'd: " + evaluate(zoo4) );
 	//...-4
+
+	String zoo5 = "( + ( + 1 1 ) ( + 1 1 ) ( + 1 1 ) )";
+	System.out.println(zoo5);
+	System.out.println("zoo5 eval'd: " + evaluate(zoo5) );
+	//...6
+
+	String zoo6 = "( + 1 ( + 1 1 ) )";
+	System.out.println(zoo6);
+	System.out.println("zoo6 eval'd: " + evaluate(zoo6) );
+	//...3
+
+	String zoo7 = "( + ( + 1 1 ) 1 )";
+	System.out.println(zoo7);
+	System.out.println("zoo7 eval'd: " + evaluate(zoo7) );
+	//...3
+
+	String zoo8 = "( + 1 ( + 1 1 ) 1 )";
+	System.out.println(zoo8);
+	System.out.println("zoo8 eval'd: " + evaluate(zoo8) );
+	//...4
 	/*v~~~~~~~~~~~~~~MAKE MORE~~~~~~~~~~~~~~v
           ^~~~~~~~~~~~~~~~AWESOME~~~~~~~~~~~~~~~^*/
     }//main
