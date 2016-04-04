@@ -26,8 +26,13 @@ public class Scheme {
      ******************************************************/
     public static String evaluate( String expr )
     {
+	//if you're done, you're done!
 	if( expr.lastIndexOf("(") == -1 ) return expr;
-	
+
+	/* The nature of infix notation is such that the further embedded an
+	   expression is, the earlier it gets evaluated. The following lines
+	   split the expression into things BEFORE and AFTER the innermost
+	   "nugget", which will be meaningful later. */
 	String before = expr.substring(0, expr.lastIndexOf("("));
 	String innermost =
 	    expr.substring(expr.lastIndexOf("("),
@@ -37,8 +42,10 @@ public class Scheme {
 	    expr.substring(expr.substring(expr.lastIndexOf("(")).indexOf(")")
 			   + expr.lastIndexOf("(") + 1);
 
+	//for convenience sake (easier to do indices w/ arrays than strings)
 	String[] tmp = innermost.split(" ");
-	Stack<String> exp = new Stack<String>();
+
+	//store operation for unload call
 	int op = 0;
 	if( tmp[1].equals("+") )
 	    op = 1;
@@ -46,9 +53,13 @@ public class Scheme {
 	    op = 2;
 	if( tmp[1].equals("*") )
 	    op = 3;
+
+	//load VALUES from "nugget" expression into stack for unload call
+	Stack<String> exp = new Stack<String>();
         for( int i = tmp.length - 2; i > 1; i-- )
 	    exp.push(tmp[i]);
 
+	//evaluate the BEFORE, the nugget, and the AFTER
 	return evaluate(before + unload(op, exp) + after);
     }//end evaluate()
 
@@ -61,20 +72,18 @@ public class Scheme {
      ******************************************************/
     public static String unload( int op, Stack<String> numbers ) 
     {
+	//"fin" for end!!
 	int fin = Integer.parseInt( numbers.pop() );
-	
-	if( op < 3 ) {
-	    while( numbers.peek() != null ) {
-		if( op == 1 ) fin += Integer.parseInt( numbers.pop() );
-		else fin -= Integer.parseInt( numbers.pop() );
-	    }
-	}
-	else {
-	    while( numbers.peek() != null ) {
-		fin *= Integer.parseInt( numbers.pop() );
-	    }
+
+        //iterate thru nums and behave as per designated operation
+	while( numbers.peek() != null ) {
+	    int i = Integer.parseInt( numbers.pop() );
+	    if( op == 1 ) fin += i;
+	    if( op == 2 ) fin -= i;
+	    if( op == 3 ) fin *= i;
 	}
 
+	//make simplified expression a string
 	return "" + fin;
     }//end unload()
 
