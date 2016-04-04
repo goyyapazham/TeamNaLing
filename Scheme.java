@@ -10,13 +10,13 @@
  * Simulates a rudimentary Scheme interpreter
  *
  * ALGORITHM for EVALUATING A SCHEME EXPRESSION:
-      1. Calculate the innermost expression and return the value
-      2. Use recursion on everything before the innermost expression, result of the innermost expression, and everything after.
-      3. Repeat steps 2 and 3 until the expression is done.
+ *    1. Iterate through the inputted string and obtain innermost expression.
+ *    2. Evaluate this expression.
+ *    3. Insert this value into, and recurse on, the full expression.
+ *    4. Repeat steps 1, 2 and 3 until the expression is fully evaluated.
  *
  * STACK OF CHOICE: ALStack by Nalanda Sharadjaya
- * b/c since we'll be working with layers, we thought that using stacks is more efficient than using linked lists. 
-   We used ArrayList instead of just List because ArrayList provides a lot of methods that we would need to rewrite if we chose List.
+ * It shouldn't matter which Stack we choose, since we never interact with the actual _stack's data structure itself -- only the methods of class Stack. Thus, our choice was completely arbitrary.
  ******************************************************/
 
 import java.util.ArrayList;
@@ -41,17 +41,23 @@ public class Scheme {
 	   expression is, the earlier it gets evaluated. The following lines
 	   split the expression into things BEFORE and AFTER the innermost
 	   "nugget", which will be meaningful later. */
-	String before = expr.substring(0, expr.lastIndexOf("(")); //everything before the innermost expression
+	
+	//everything before the innermost expression
+	String before = expr.substring(0, expr.lastIndexOf("("));
+
+	//the innermost expression
 	String innermost =
 	    expr.substring(expr.lastIndexOf("("),
 			   expr.substring(expr.lastIndexOf("(")).indexOf(")")
-			   + expr.lastIndexOf("(") + 1);//the innermost expression
+			   + expr.lastIndexOf("(") + 1);
+
+	//everything after the innermost expression
 	String after =
 	    expr.substring(expr.substring(expr.lastIndexOf("(")).indexOf(")")
-			   + expr.lastIndexOf("(") + 1);//everything after the innermost expression
+			   + expr.lastIndexOf("(") + 1);
 
 	//for convenience sake (easier to do indices w/ arrays than strings)
-	String[] tmp = innermost.split(" "); //creates an array of the operation and numbers within the innermost expression
+	String[] tmp = innermost.split(" ");
 
 	//store operation for unload call
 	int op = 0;
