@@ -60,12 +60,6 @@ public class Stack<T> {
 	return _stack.size();
     }
 
-    //For public access to _stack.
-    public ArrayList<T> getStack()
-    {
-	return _stack;
-    }
-
     //main method for testing
     public static void main( String[] args ) {
 
